@@ -1,0 +1,6 @@
+Scrapy
+Twisted
+service-identity
+PyYAML
+GitPython
+html2text

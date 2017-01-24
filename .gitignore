@@ -1,0 +1,11 @@
+*~
+*.pyc
+.*swp
+*.egg-info/
+deb_dist
+dist
+build
+ssh
+log
+*.scrapy
+*local.py
