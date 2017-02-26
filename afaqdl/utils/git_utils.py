@@ -1,35 +1,46 @@
 # -*- coding: utf-8 -*-
-# vim:ts=4:sw=4:expandtab
 
 # Copyright 2016 juxor <ju@riseup.net>
 
-# This file is part of afaq_scraper.
+# This file is part of afaq-dl.
 #
-# afaq_scraper is free software: you can redistribute it and/or modify
+# afaq-dl is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# afaq_scraper is distributed in the hope that it will be useful,
+# afaq-dl is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with afaq_scraper.  If not, see <http://www.gnu.org/licenses/>.
+# along with afaq-dl.  If not, see <http://www.gnu.org/licenses/>.
 
-from git import Repo, InvalidGitRepositoryError, GitCmdObjectDB, \
-    GitCommandError, Git
-from os import environ, makedirs, chmod, listdir, sep
-from os.path import join, isdir, isfile, abspath, dirname, splitext
-import sys
-from shutil import rmtree
-import yaml
-import time
 import logging
+import sys
+import io
+from os import environ, makedirs, chmod
+from os.path import isdir, isfile
+from shutil import rmtree
+from git import Repo, InvalidGitRepositoryError, GitCmdObjectDB, \
+    GitCommandError
+
 from system import write_metadata_file
 
+
 logger = logging.getLogger(__name__)
+
+__all__ = ['check_ssh_keys',
+     'clone_repo',
+     'commit_push',
+     'commit_push_if_changes',
+     'create_repo',
+     'obtain_repo',
+     'pull_repo',
+     'write_ssh_command',
+     'write_ssh_key_server',
+     'write_ssh_keys']
 
 
 def obtain_repo(local_repo_path, data_remote_repo,
@@ -71,7 +82,7 @@ def obtain_repo(local_repo_path, data_remote_repo,
                                              data_remote_repo,
                                              git_ssh_command_path)
     except GitCommandError as e:
-        logger.debug('Can not clone repo.')
+        logger.debug('Can not clone repo %s.', e)
         if exit_on_error:
             sys.exit()
         else:
@@ -158,16 +169,23 @@ def create_repo(local_repo_path, data_remote_repo):
 def commit_push(local_repo, repo_author, repo_email, git_ssh_command_path,
                 data_remote_repo):
     logger.info("COMMITING")
-    r = local_repo.index.add('*')
-    files = '\n'.join([f[3] for f in r])
-    logger.debug('Added files to repo %s', files)
-    commit_msg = "Crawl completed at " + time.strftime("%Y-%m-%d %H-%M-%S")
+#    r = local_repo.index.add('*')
+#    files = '\n'.join([f[3] for f in r])
+#    logger.debug('Added files to repo %s', files)
+    r = local_repo.git.add(update=True)
+    # TODO check for deleted files
+    # TODO: check for untracket files
+    commit_msg = "Automatic crawling"
     environ["GIT_AUTHOR_NAME"] = repo_author
     environ["GIT_AUTHOR_EMAIL"] = repo_email
     # commit only if something changed
     committed = local_repo.index.commit(commit_msg)
+#    try:
+#        committed = local_repo.index.commit(commit_msg)
+#    except TypeError as e:
+#        logger.error('Something happened when commiting %s', e)
     logger.info('Commited data')
-    logger.info(committed)
+#    logger.info(committed.hexsha)
     logger.info('PUSHING')
     remote_repo = local_repo.remotes[data_remote_repo.get('name')]
     logger.info('To repository %s named %s' % (remote_repo.url,
@@ -175,7 +193,7 @@ def commit_push(local_repo, repo_author, repo_email, git_ssh_command_path,
     logger.debug('pushing with git_ssh_command_path %s' %
                  git_ssh_command_path)
     # more debugging for morph.io
-    with open(git_ssh_command_path) as f:
+    with io.open(git_ssh_command_path) as f:
         logger.debug('ssh command content %s' % f.read())
     with remote_repo.repo.git.custom_environment(GIT_SSH=git_ssh_command_path):
         environ['GIT_SSH'] = git_ssh_command_path
@@ -193,7 +211,8 @@ def commit_push_if_changes(local_repo, repo_author, repo_email,
                            git_ssh_command_path,
                            data_remote_repo, metadata_path):
     # FIXME: handle changes to be commited
-    if local_repo.index.diff(None) or local_repo.untracked_files:
+#    if local_repo.index.diff(None) or local_repo.untracked_files:
+    if local_repo.is_dirty():
         write_metadata_file(metadata_path, local_repo.working_dir)
         commit_push(local_repo, repo_author, repo_email, git_ssh_command_path,
                     data_remote_repo)
@@ -210,11 +229,11 @@ def write_ssh_keys(ssh_dir, ssh_priv_key_env, ssh_pub_key_env,
         makedirs(ssh_dir)
         logger.debug('created dir %s' % ssh_dir)
     if not isfile(ssh_pub_key_path):
-        with open(ssh_pub_key_path, 'wb') as f:
+        with io.open(ssh_pub_key_path, 'wb') as f:
             f.write(ssh_pub_key)
         logger.debug('wroten %s' % ssh_pub_key_path)
     if not isfile(ssh_priv_key_path):
-        with open(ssh_priv_key_path, 'wb') as f:
+        with io.open(ssh_priv_key_path, 'wb') as f:
             f.write(ssh_priv_key)
         logger.debug('wroten %s' % ssh_priv_key_path)
         chmod(ssh_priv_key_path, 0600)
@@ -222,7 +241,7 @@ def write_ssh_keys(ssh_dir, ssh_priv_key_env, ssh_pub_key_env,
 
 def write_ssh_command(git_ssh_command_path, git_ssh_command):
     if not isfile(git_ssh_command_path):
-        with open(git_ssh_command_path, 'w') as f:
+        with io.open(git_ssh_command_path, 'w') as f:
             f.write(git_ssh_command)
         chmod(git_ssh_command_path, 0766)
         logger.debug('wroten %s' % git_ssh_command_path)
@@ -231,7 +250,7 @@ def write_ssh_command(git_ssh_command_path, git_ssh_command):
 
 def write_ssh_key_server(ssh_pub_key, ssh_pub_key_path):
     if not isfile(ssh_pub_key_path):
-        with open(ssh_pub_key_path, 'w') as f:
+        with io.open(ssh_pub_key_path, 'w') as f:
             f.write(ssh_pub_key)
         logger.debug('wroten %s' % ssh_pub_key_path)
         logger.debug('with content %s' % ssh_pub_key)
@@ -240,17 +259,17 @@ def write_ssh_key_server(ssh_pub_key, ssh_pub_key_path):
 def check_ssh_keys(local_repo, git_ssh_command_path, ssh_priv_key_path,
                    ssh_pub_key_path, ssh_pub_key_path_server):
 
-    with open(ssh_pub_key_path, 'r') as f:
+    with io.open(ssh_pub_key_path, 'r') as f:
         logger.debug('ssh pub key %s' % f.read())
-    with open(ssh_priv_key_path, 'r') as f:
+    with io.open(ssh_priv_key_path, 'r') as f:
         logger.debug('ssh priv key %s' % f.read())
-    with open(ssh_pub_key_path_server, 'r') as f:
+    with io.open(ssh_pub_key_path_server, 'r') as f:
         logger.debug('ssh pub key server %s' % f.read())
     remote_repo = local_repo.remotes[0]
     logger.debug('pushing with git_ssh_command_path %s' %
                  git_ssh_command_path)
     # more debugging for morph.io
-    with open(git_ssh_command_path) as f:
+    with io.open(git_ssh_command_path) as f:
         logger.debug('ssh command content %s' % f.read())
     logger.debug('MORPH_SSH_PUB_KEY')
     logger.debug(environ.get('MORPH_SSH_PUB_KEY'))

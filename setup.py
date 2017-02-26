@@ -1,52 +1,50 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
-#   This file is part of afaq_scraper, a set of scripts to
-#   use different tor guards depending on the network we connect to.
+# Copyright 2016 juxor <ju@riseup.net>
+
+# This file is part of afaq-dl.
 #
-#   Copyright (C) 2016 juxor (juxor at riseup dot net)
+# afaq-dl is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
-#   afaq_scraper is free software; you can redistribute it and/or modify
-#   it under the terms of the GNU General Public License Version 3 of the
-#   License, or (at your option) any later version.
+# afaq-dl is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-#   afaq_scraper is distributed in the hope that it will be useful,
-#   but WITHOUT ANY WARRANTY; without even the implied warranty of
-#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#   GNU General Public License for more details.
-#
-#   You should have received a copy of the GNU General Public License
-#   along with afaq_scraper.  If not, see <http://www.gnu.org/licenses/>.
-#
+# You should have received a copy of the GNU General Public License
+# along with afaq-dl.  If not, see <http://www.gnu.org/licenses/>.
+""""""
 
 from setuptools import setup, find_packages
-import afaq_scraper
+import afaqdl
 setup(
-    name='afaq-scraper',
-    version=afaq_scraper.__version__,
-    description=afaq_scraper.__description__,
-    long_description=afaq_scraper.__long_description__,
-    author=afaq_scraper.__author__,
-    author_email=afaq_scraper.__author_mail__,
+    name='afaq-dl',
+    version=afaqdl.__version__,
+    description=afaqdl.__description__,
+    long_description=afaqdl.__long_description__,
+    author=afaqdl.__author__,
+    author_email=afaqdl.__author_mail__,
     license='GPLv3+',
-    url=afaq_scraper.__website__,
+    url=afaqdl.__website__,
 
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
     dependency_links=[
         "https://pypi.python.org/simple/scrapy",
-        "https://pypi.python.org/simple/twisted",
-        "https://pypi.python.org/simple/service-identity",
         "https://pypi.python.org/simple/pyyaml",
         "https://pypi.python.org/simple/gitpython",
-        "https://pypi.python.org/simple/html2text"
+        "https://pypi.python.org/simple/html2text",
+        "https://pypi.python.org/simple/beautifulsoup4"
     ],
     extras_require={
         'dev': ['ipython'],
         'test': ['coverage'],
     },
-
-    #entry_points={'scrapy': ['settings = afaq_scraper.settings']},
-
-    scripts=['afaq_scraper/afaq_update.py'],
+    #entry_points={'scrapy': ['settings = afaqdl.settings']},
+    scripts=['bin/anarchism_update'],
     keywords='python scrapy afaq anarchism git html markdown',
     classifiers=[
         'Development Status :: 3 - Alpha',

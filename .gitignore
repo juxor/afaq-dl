@@ -7,5 +7,6 @@ dist
 build
 ssh
 log
+afaq
 *.scrapy
 *local.py

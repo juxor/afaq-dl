@@ -3,23 +3,24 @@
 
 # Copyright 2016 juxor <ju@riseup.net>
 
-# This file is part of afaq_scraper.
+# This file is part of afaq-dl.
 #
-# afaq_scraper is free software: you can redistribute it and/or modify
+# afaqdl is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# afaq_scraper is distributed in the hope that it will be useful,
+# afaqdl is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with afaq_scraper.  If not, see <http://www.gnu.org/licenses/>.
+# along with afaqdl.  If not, see <http://www.gnu.org/licenses/>.
+""""""
 
 try:
-    from afaq_scraper._version import version
+    from ._version import version
 except ImportError:
     try:
         from setuptools_scm import get_version
@@ -30,13 +31,11 @@ except ImportError:
 __version__ = version
 __author__ = "juxor"
 __author_mail__ = "ju@riseup.net"
-__description__ = "DHCP client disclosing less identifying information"
-__long_description__ = "Python implmentation of the DHCP Anonymity Profile \
-                        (RFC7844) designed for users that \
-                        wish to remain anonymous to the visited network \
-                        minimizing disclosure of identifying information."
-__website__ = 'https://github.com/juxor0/afaq_scraper'
-__documentation__ = 'http://afaq_scraper.readthedocs.io/en/' + __version__
+__description__ = "Download the online book An Anarchist FAQ"
+__long_description__ = """Download the online book An Anarchist FAQ (AFAQ)
+convert the HTML to Markdown and push the changes to the afaq repository."""
+__website__ = 'https://github.com/juxor/afaq-dl'
+__documentation__ = 'http://afaqdl.readthedocs.io/en/' + __version__
 __authors__ = []
 __copyright__ = """Copyright (C) 2016 <ju@riseup.net>
 This program comes with ABSOLUTELY NO WARRANTY.
@@ -58,3 +57,4 @@ __license__ = """
     You should have received a copy of the GNU General Public License
     along with this package. If not, see <http://www.gnu.org/licenses/>.
 """
+__all__ = ['utils', 'spiders']

@@ -1,0 +1,23 @@
+#!/bin/dash
+clean(){
+        shift;
+	rm -fr $@;
+	exit 0;
+}
+
+build(){
+        shift;
+	ORIG_DIR=$1;
+        DEST_DIR=`echo $ORIG_DIR|sed -s "s,html,txt,g"`;
+        mkdir -p $DEST_DIR;
+	AAFAQ_PATH=`echo $ORIG_DIR|sed -s "s,\/,\\\/,g"`;
+        for html in `find $ORIG_DIR -type f -name "*.html"`;
+        do
+		txt=$(basename `echo $html|sed -s "s,html,txt,g"`);
+		# workaround #770011, see #800007
+                LANG=C lynx -dump $html|sed -e "s,localhost${AAFAQ_PATH},usr\/share\/doc\/anarchism\/html,g" -e "s,anarchism\/html\/\(.*\)\.html,anarchism\/txt\/\1.txt,g" -e "s,file:\/,,g" > $DEST_DIR/$txt;
+        done;
+	exit 0;
+}
+
+[ -z $1 ] && exit 0 || $1 $@;
