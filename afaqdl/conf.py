@@ -65,6 +65,7 @@ SSH_PUB_KEY = u'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCqFOCm4EDMCM9AXxTfRjeWETPd
 #######################################################################
 import logging
 from datetime import datetime
+import os
 from os.path import dirname, join, abspath
 
 NOW = datetime.utcnow().replace(microsecond=0).isoformat().replace(':', '-')
@@ -78,7 +79,7 @@ LOG_FILENAME = NOW + '.log'
 LOG_FULLPATH = join(PR_PATH, LOG_DIR, LOG_FILENAME)
 LOG_FILENAME = LOG_FULLPATH
 
-DATA_LOCAL_REPO_PATH = join(PR_PATH, DATA_LOCAL_REPO_DIR)
+DATA_LOCAL_REPO_PATH = join(os.getcwd(), DATA_LOCAL_REPO_DIR)
 HTML_PATH = join(DATA_LOCAL_REPO_PATH, HTML_DIR)
 
 MD_PATH = join(DATA_LOCAL_REPO_PATH, MD_DIR)
@@ -87,7 +88,7 @@ TXT_BS_PATH = join(DATA_LOCAL_REPO_PATH, TXT_BS_DIR)
 HTML2TXT_COMMAND = join(PR_PATH, BIN_DIR, HTML2TXT_SCRIPT)
 
 # ssh
-SSH_PATH = join(PR_PATH, SSH_DIR)
+SSH_PATH = join(os.getcwd(), SSH_DIR)
 SSH_PRIV_KEY_PATH = join(SSH_PATH, 'id_rsa')
 SSH_PUB_KEY_PATH = join(SSH_PATH, 'id_rsa.pub')
 SSH_PUB_KEY_SERVER_PATH = join(SSH_PATH, 'ssh_pub_key_server')
