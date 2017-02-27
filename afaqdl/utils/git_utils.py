@@ -26,7 +26,7 @@ from shutil import rmtree
 from git import Repo, InvalidGitRepositoryError, GitCmdObjectDB, \
     GitCommandError
 
-from system import write_metadata_file
+from .system import write_metadata_file
 
 
 logger = logging.getLogger(__name__)
@@ -236,14 +236,18 @@ def write_ssh_keys(ssh_dir, ssh_priv_key_env, ssh_pub_key_env,
         with io.open(ssh_priv_key_path, 'wb') as f:
             f.write(ssh_priv_key)
         logger.debug('wroten %s' % ssh_priv_key_path)
-        chmod(ssh_priv_key_path, 0600)
+        # 0600
+        chmod(ssh_priv_key_path, 2 ** 8 + 2 ** 7)
 
 
 def write_ssh_command(git_ssh_command_path, git_ssh_command):
     if not isfile(git_ssh_command_path):
         with io.open(git_ssh_command_path, 'w') as f:
             f.write(git_ssh_command)
-        chmod(git_ssh_command_path, 0766)
+        # 0766
+        chmod(git_ssh_command_path, 2 ** 8 + 2 ** 7 + 2 ** 6 +
+                                    2 ** 5 + 2 ** 4 +
+                                    2 ** 3 + 2 ** 2)
         logger.debug('wroten %s' % git_ssh_command_path)
         logger.debug('with content %s' % git_ssh_command)
 
