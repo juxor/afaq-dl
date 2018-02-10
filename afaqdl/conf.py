@@ -39,7 +39,7 @@ HTML2TXT_SCRIPT = 'html2txt'
 # repo
 #######################################################################
 DATA_REMOTE_REPO = {'name': 'origin',
-                    'url': 'https://0xacab.org/ju/afaq',
+                    'url': 'git@0xacab.org:ju/afaq.git',
                     'branch': 'master'}
 # NOTE: only for DEBUG!
 # DATA_REMOTE_REPO = {'name': 'local',
