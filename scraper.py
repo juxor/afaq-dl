@@ -133,7 +133,8 @@ def main():
         # Conversions
         convert.convert_dir(conf.HTML_PATH, conf.MD_PATH,
                             convert.html2md, '.md')
-        convert.html2txt(conf.HTML2TXT_COMMAND, conf.HTML_PATH)
+        # NOTE: since there is already md, txt is not needed
+        #convert.html2txt(conf.HTML2TXT_COMMAND, conf.HTML_PATH)
 
     if args.push is True:
         # Push the scraped data in the repos
