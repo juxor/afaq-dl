@@ -59,6 +59,16 @@ class AfaqSpider(scrapy.Spider):
             f.write(html)
         logger.info('Saved file %s.', filepath)
 
+        # From Version 15.3 (26-Nov-2019), the whole Website can not be
+        # anymore fully scrapped by just following `next` URLs, therefore
+        # extract all the links include in the menu `book-navigation`.
+        # From section A, it can follow `next`, but that's not a problem.
+        urls = response.xpath(conf.XPATH_URLS).extract()
+        for url in urls:
+            page = url.split("/")[-1]
+            logger.debug("Page %s", url)
+            yield Request(response.urljoin(page), self.parse)
+
         next_page = response.xpath(conf.XPATH_NEXT).extract_first()
         logger.debug('Next page %s.', next_page)
         if next_page:

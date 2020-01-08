@@ -27,6 +27,7 @@ URL = 'https://anarchism.pageabode.com/afaq/index.html'
 DOMAIN = 'anarchism.pageabode.com'
 XPATH_CONTENT = "//div[@class='node']/div[@class='content clear-block']"
 XPATH_NEXT = '//link[@rel="next"]/@href'
+XPATH_URLS = '//div[@class="book-navigation"]/ul/li/a/@href'
 
 # FS dirs
 #######################################################################
