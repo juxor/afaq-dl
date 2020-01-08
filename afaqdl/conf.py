@@ -20,7 +20,10 @@
 DEBUG = False
 # spider
 #######################################################################
-URL = 'http://anarchism.pageabode.com/afaq/index.html'
+# flood.pageabode.com has a Let's Encrypt certificate valid from
+# November 14, 2019, though it will expire February 12, 2020, so there will be
+# certificate issues if not updated by then.
+URL = 'https://anarchism.pageabode.com/afaq/index.html'
 DOMAIN = 'anarchism.pageabode.com'
 XPATH_CONTENT = "//div[@class='node']/div[@class='content clear-block']"
 XPATH_NEXT = '//link[@rel="next"]/@href'
