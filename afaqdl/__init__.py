@@ -19,14 +19,7 @@
 # along with afaqdl.  If not, see <http://www.gnu.org/licenses/>.
 """"""
 
-try:
-    from ._version import version
-except ImportError:
-    try:
-        from setuptools_scm import get_version
-        version = get_version()
-    except (ImportError, LookupError):
-        version = '0.7'
+from ._version import version
 
 __version__ = version
 __author__ = "juxor"
