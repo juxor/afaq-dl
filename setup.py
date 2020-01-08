@@ -32,12 +32,13 @@ setup(
     url=afaqdl.__website__,
 
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
-    dependency_links=[
-        "https://pypi.python.org/simple/scrapy",
-        "https://pypi.python.org/simple/pyyaml",
-        "https://pypi.python.org/simple/gitpython",
-        "https://pypi.python.org/simple/html2text",
-        "https://pypi.python.org/simple/beautifulsoup4"
+    install_requires=[
+        'scrapy>=1.3',
+        'pyaml>=3.12',
+        'gitpython>2.1',
+        'html2text>=2016.9.19',
+        'beautifulsoup4>=4.7',
+        'urllib3>=1.24'
     ],
     extras_require={
         'dev': ['ipython'],
