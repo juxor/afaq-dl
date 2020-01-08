@@ -45,8 +45,11 @@ setup(
         'test': ['coverage'],
     },
     python_requires='>=3.7',
-    #entry_points={'scrapy': ['settings = afaqdl.settings']},
-    scripts=['bin/anarchism_update'],
+    entry_points={
+        'console_scripts': [
+            'afaq-dl = scraper:main',
+        ]
+    },
     keywords='python scrapy afaq anarchism git html markdown',
     classifiers=[
         'Development Status :: 3 - Alpha',
