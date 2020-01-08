@@ -44,6 +44,7 @@ setup(
         'dev': ['ipython'],
         'test': ['coverage'],
     },
+    python_requires='>=3.7',
     #entry_points={'scrapy': ['settings = afaqdl.settings']},
     scripts=['bin/anarchism_update'],
     keywords='python scrapy afaq anarchism git html markdown',
@@ -55,7 +56,8 @@ setup(
         'License :: OSI Approved :: GNU General Public License v3 ' +
         'or later (GPLv3+)',
         'Operating System :: OS Independent',
-        'Programming Language :: Python',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
 )
