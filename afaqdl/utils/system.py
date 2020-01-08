@@ -24,7 +24,7 @@ import os.path
 import yaml
 import shutil
 import socket
-from urllib2 import urlopen
+import urllib3
 from datetime import datetime
 from pkg_resources import get_distribution, DistributionNotFound
 
@@ -104,7 +104,9 @@ def obtain_ip():
 
 
 def obtain_public_ip():
-    my_ip = urlopen('http://ip.42.pl/raw').read()
+    http = urllib3.PoolManager()
+    r = http.request('GET', 'https://ip.42.pl/raw')
+    my_ip = r.data
     logger.debug('public ip %s' % my_ip)
     return str(my_ip)
 
